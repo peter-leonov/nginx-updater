@@ -53,6 +53,7 @@ class NginxUpdater
     puts "Next version is #{nxt}"
     
     prepare_temp_dir
+    get_version nxt
     
   end
   
@@ -80,6 +81,11 @@ class NginxUpdater
   def check_version v
     puts "..checking for #{v}"
     !!`curl -sI #{v.url}`.match(/200 OK/)
+  end
+  
+  def get_version v
+    `curl -so #{@tmp}/nginx.tar.gz #{v.url}`
+    `tar -xzf #{@tmp}/nginx.tar.gz -C #{@tmp}`
   end
   
   def git_checkout branch
