@@ -43,6 +43,11 @@ class NginxUpdater
     puts "Current version is #{current}"
     
     nxt = guess_next_version(current)
+    unless nxt
+      puts "Current version is the latest"
+      return
+    end
+    
     puts "Next version is #{nxt}"
   end
   
