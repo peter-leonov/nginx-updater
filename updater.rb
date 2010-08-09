@@ -33,6 +33,11 @@ class NginxUpdater
   def git_checkout branch
     system("git checkout #{branch}")
   end
+  
+  def guess_current_nginx_version
+    source = File.read("src/core/nginx.h")
+    source.scan(/#define\s+NGINX_VERSION\s+"(\d+)\.(\d+)\.(\d+)"/)[0]
+  end
   end
   
 end
