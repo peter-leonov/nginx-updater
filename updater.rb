@@ -39,6 +39,12 @@ class NginxUpdater
     
     git_checkout(git_branch)
     
+    current = guess_current_nginx_version
+    puts "Current version is #{current}"
+    
+    nxt = guess_next_version(current)
+    puts "Next version is #{nxt}"
+  end
   
   def guess_next_version v
     n = v.dup
@@ -56,6 +62,7 @@ class NginxUpdater
   end
   
   def check_version v
+    puts "..checking for #{v}"
     !!`curl -sI #{v.url}`.match(/200 OK/)
   end
   
