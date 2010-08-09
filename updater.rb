@@ -52,11 +52,14 @@ class NginxUpdater
     
     puts "Next version is #{nxt}"
     
-    tmp = "#{Dir.tmpdir}/#{Config::TMP_DIR_SUFFIX}"
+    prepare_temp_dir
     
-    FileUtils.rm_rf(tmp)
-    FileUtils.mkdir_p(tmp)
-    
+  end
+  
+  def prepare_temp_dir
+    @tmp = "#{Dir.tmpdir}/#{Config::TMP_DIR_SUFFIX}"
+    FileUtils.rm_rf(@tmp)
+    FileUtils.mkdir_p(@tmp)
   end
   
   def guess_next_version v
