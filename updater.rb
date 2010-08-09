@@ -10,6 +10,10 @@ class NginxUpdater
     def to_s
       "#{self[0]}.#{self[1]}.#{self[2]}"
     end
+    
+    def url
+      "http://sysoev.ru/nginx/nginx-#{self}.tar.gz"
+    end
   end
   
   def initialize
@@ -37,7 +41,7 @@ class NginxUpdater
     
   
   def check_version v
-    !!`curl -sI http://sysoev.ru/nginx/nginx-#{v}.tar.gz`.match(/200 OK/)
+    !!`curl -sI #{v.url}`.match(/200 OK/)
   end
   
   def git_checkout branch
