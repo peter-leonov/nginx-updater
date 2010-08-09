@@ -36,6 +36,10 @@ class NginxUpdater
     git_checkout(git_branch)
     
   
+  def check_version v
+    !!`curl -sI http://sysoev.ru/nginx/nginx-#{v}.tar.gz`.match(/200 OK/)
+  end
+  
   def git_checkout branch
     system("git checkout #{branch} 2>/dev/null")
   end
@@ -43,7 +47,6 @@ class NginxUpdater
   def guess_current_nginx_version
     source = File.read("src/core/nginx.h")
     Version.new(source.scan(/#define\s+NGINX_VERSION\s+"(\d+)\.(\d+)\.(\d+)"/)[0].map{ |v| v.to_i })
-  end
   end
   
 end
