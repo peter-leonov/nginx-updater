@@ -26,9 +26,13 @@ class NginxUpdater
   end
 
   def update_branch nginx_branch, git_branch
-    system("git checkout #{git_branch}")
     
+    git_checkout(git_branch)
     
+  
+  def git_checkout branch
+    system("git checkout #{branch}")
+  end
   end
   
 end
