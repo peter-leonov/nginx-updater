@@ -42,7 +42,7 @@ class NginxUpdater
   
   def guess_current_nginx_version
     source = File.read("src/core/nginx.h")
-    Version.new(source.scan(/#define\s+NGINX_VERSION\s+"(\d+)\.(\d+)\.(\d+)"/)[0])
+    Version.new(source.scan(/#define\s+NGINX_VERSION\s+"(\d+)\.(\d+)\.(\d+)"/)[0].map{ |v| v.to_i })
   end
   end
   
