@@ -6,6 +6,12 @@ class NginxUpdater
     NGINX_SRC_PATH = "/Users/peter/pro/nginx/"
   end
   
+  class Version < Array
+    def to_s
+      "#{self[0]}.#{self[1]}.#{self[2]}"
+    end
+  end
+  
   def initialize
     @branches = {"0.8" => "master"}
   end
@@ -36,7 +42,7 @@ class NginxUpdater
   
   def guess_current_nginx_version
     source = File.read("src/core/nginx.h")
-    source.scan(/#define\s+NGINX_VERSION\s+"(\d+)\.(\d+)\.(\d+)"/)[0]
+    Version.new(source.scan(/#define\s+NGINX_VERSION\s+"(\d+)\.(\d+)\.(\d+)"/)[0])
   end
   end
   
