@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby1.9
+require 'tmpdir'
 
 class NginxUpdater
 
   module Config
     NGINX_SRC_PATH = "/Users/peter/pro/nginx/"
+    TMP_DIR_SUFFIX = "nginx-updater"
   end
   
   class Version < Array
@@ -49,6 +51,12 @@ class NginxUpdater
     end
     
     puts "Next version is #{nxt}"
+    
+    tmp = "#{Dir.tmpdir}/#{Config::TMP_DIR_SUFFIX}"
+    
+    FileUtils.rm_rf(tmp)
+    FileUtils.mkdir_p(tmp)
+    
   end
   
   def guess_next_version v
