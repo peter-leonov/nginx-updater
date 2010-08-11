@@ -2,6 +2,12 @@
 require 'tmpdir'
 require 'date'
 
+class String
+  def quote
+    gsub(/([$"\\])/, '\\\\\1')
+  end
+end
+
 class NginxUpdater
 
   module Config
