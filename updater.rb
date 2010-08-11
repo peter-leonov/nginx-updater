@@ -124,7 +124,7 @@ class NginxUpdater
     system(%Q{
       cd #{@tmp}/nginx-#{v}/
       git add . && git add -u . && git status
-      git commit --author="#{Config::AUTOR}" --message="nginx #{v}\n\n#{message.quote}"
+      git commit --author="#{Config::AUTHOR}" --message="nginx #{v}\n\n#{message.quote}"
       git tag #{v}
     })
   end
