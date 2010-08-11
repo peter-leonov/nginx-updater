@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby1.9
 require 'tmpdir'
+require 'date'
 
 class NginxUpdater
 
@@ -56,6 +57,7 @@ class NginxUpdater
     prepare_temp_dir
     get_version nxt
     update_working_tree nxt
+    changes = get_changes nxt
   end
   
   def prepare_temp_dir
@@ -87,6 +89,20 @@ class NginxUpdater
   def get_version v
     `curl -so #{@tmp}/nginx.tar.gz #{v.url}`
     `tar -xzf #{@tmp}/nginx.tar.gz -C #{@tmp}`
+  
+  def get_changes v
+    changes = File.read("#{@tmp}/nginx-#{v}/CHANGES")
+    changes.scan(/^Changes\s+with\s+nginx\s+(\d+\.\d+\.\d+)\s+(\d+\s+\w+\s+\d+)\n(.+?)\n\n\n/m) do |m|
+      unless m[0] == v.to_s
+        next
+      end
+      return {
+        "date" => Date.parse(m[1]),
+        "message" => m[2]
+      }
+    end
+    nil
+  end
   
   def update_working_tree v
     # system("cd #{@tmp}/nginx-#{v}/; git add . && git add -u . && git status")
