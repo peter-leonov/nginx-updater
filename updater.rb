@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby1.9
 require 'tmpdir'
 require 'date'
+require 'iconv'
 
 class String
   def quote
@@ -27,6 +28,7 @@ class NginxUpdater
   end
   
   def initialize
+    @ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
     @branches = {"0.8" => "master"}
     ENV["GIT_DIR"] = "#{Config::NGINX_SRC_PATH}.git/"
   end
@@ -99,7 +101,7 @@ class NginxUpdater
   end
   
   def get_changes v
-    changes = File.read("#{@tmp}/nginx-#{v}/CHANGES")
+    changes = @ic.iconv(File.read("#{@tmp}/nginx-#{v}/CHANGES"))
     changes.scan(/^Changes\s+with\s+nginx\s+(\d+\.\d+\.\d+)\s+(\d+\s+\w+\s+\d+)\n(.+?)\n\n\n/m) do |m|
       unless m[0] == v.to_s
         next
