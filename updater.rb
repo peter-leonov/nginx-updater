@@ -13,6 +13,7 @@ class NginxUpdater
   module Config
     NGINX_SRC_PATH = "/Users/peter/pro/nginx/"
     TMP_DIR_SUFFIX = "nginx-updater"
+    AUTOR          = "Igor Sysoev <igor@sysoev.ru>"
   end
   
   class Version < Array
@@ -64,6 +65,7 @@ class NginxUpdater
     get_version nxt
     update_working_tree nxt
     changes = get_changes nxt
+    commit nxt, changes["message"], changes["date"],
   end
   
   def prepare_temp_dir
@@ -95,6 +97,7 @@ class NginxUpdater
   def get_version v
     `curl -so #{@tmp}/nginx.tar.gz #{v.url}`
     `tar -xzf #{@tmp}/nginx.tar.gz -C #{@tmp}`
+  end
   
   def get_changes v
     changes = File.read("#{@tmp}/nginx-#{v}/CHANGES")
@@ -112,6 +115,11 @@ class NginxUpdater
   
   def update_working_tree v
     # system("cd #{@tmp}/nginx-#{v}/; git add . && git add -u . && git status")
+  end
+  
+  def commit v, message, date
+    ENV["GIT_AUTHOR_DATE"] = date.strftime("%Y-%m-%d 12:00:00")
+    system(%Q{cd #{@tmp}/nginx-#{v}/; git commit --author="#{Config::AUTOR}" --message="nginx #{v}\n\n#{message.quote}"})
   end
   
   def git_checkout branch
