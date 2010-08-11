@@ -20,6 +20,7 @@ class NginxUpdater
   
   def initialize
     @branches = {"0.8" => "master"}
+    ENV["GIT_DIR"] = "#{Config::NGINX_SRC_PATH}.git/"
   end
   
   def run
@@ -54,7 +55,7 @@ class NginxUpdater
     
     prepare_temp_dir
     get_version nxt
-    
+    update_working_tree nxt
   end
   
   def prepare_temp_dir
@@ -86,6 +87,9 @@ class NginxUpdater
   def get_version v
     `curl -so #{@tmp}/nginx.tar.gz #{v.url}`
     `tar -xzf #{@tmp}/nginx.tar.gz -C #{@tmp}`
+  
+  def update_working_tree v
+    # system("cd #{@tmp}/nginx-#{v}/; git add . && git add -u . && git status")
   end
   
   def git_checkout branch
