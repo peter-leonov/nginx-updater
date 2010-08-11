@@ -52,21 +52,25 @@ class NginxUpdater
     
     git_checkout(git_branch)
     
-    current = guess_current_nginx_version
-    puts "Current version is #{current}"
-    
-    nxt = guess_next_version(current)
-    unless nxt
-      puts "Current version is the latest"
-      return
+    while true do
+      get_latest
+      
+      current = guess_current_nginx_version
+      puts "Current version is #{current}"
+      
+      nxt = guess_next_version(current)
+      unless nxt
+        puts "Current version is the latest"
+        return
+      end
+      
+      puts "Next version is #{nxt}"
+      
+      prepare_temp_dir
+      get_version nxt
+      changes = get_changes nxt
+      commit nxt, changes["message"], changes["date"]
     end
-    
-    puts "Next version is #{nxt}"
-    
-    prepare_temp_dir
-    get_version nxt
-    changes = get_changes nxt
-    commit nxt, changes["message"], changes["date"],
   end
   
   def prepare_temp_dir
@@ -126,7 +130,11 @@ class NginxUpdater
   end
   
   def git_checkout branch
-    system("git checkout #{branch}")
+    system("git checkout #{branch} && git reset --hard && git clean -f -d")
+  end
+  
+  def get_latest
+    system("git reset --hard && git clean -f -d")
   end
   
   def guess_current_nginx_version
