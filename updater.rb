@@ -63,7 +63,6 @@ class NginxUpdater
     
     prepare_temp_dir
     get_version nxt
-    update_working_tree nxt
     changes = get_changes nxt
     commit nxt, changes["message"], changes["date"],
   end
@@ -113,13 +112,14 @@ class NginxUpdater
     nil
   end
   
-  def update_working_tree v
-    # system("cd #{@tmp}/nginx-#{v}/; git add . && git add -u . && git status")
-  end
-  
   def commit v, message, date
     ENV["GIT_AUTHOR_DATE"] = date.strftime("%Y-%m-%d 12:00:00")
-    system(%Q{cd #{@tmp}/nginx-#{v}/; git commit --author="#{Config::AUTOR}" --message="nginx #{v}\n\n#{message.quote}"})
+    
+    system(%Q{
+      cd #{@tmp}/nginx-#{v}/
+      git add . && git add -u . && git status
+      git commit --author="#{Config::AUTOR}" --message="nginx #{v}\n\n#{message.quote}"
+    })
   end
   
   def git_checkout branch
