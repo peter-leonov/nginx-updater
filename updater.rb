@@ -89,7 +89,7 @@ class NginxUpdater
   end
   
   def git_checkout branch
-    system("git checkout #{branch} 2>/dev/null")
+    system("git checkout #{branch}")
   end
   
   def guess_current_nginx_version
