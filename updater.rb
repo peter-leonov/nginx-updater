@@ -14,7 +14,7 @@ class NginxUpdater
   module Config
     NGINX_SRC_PATH = "/Users/peter/pro/nginx/"
     TMP_DIR_SUFFIX = "nginx-updater"
-    AUTOR          = "Igor Sysoev <igor@sysoev.ru>"
+    AUTHOR         = "Igor Sysoev <igor@sysoev.ru>"
   end
   
   class Version < Array
