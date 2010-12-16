@@ -29,7 +29,7 @@ class NginxUpdater
   
   def initialize
     @ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-    @branches = {"0.8" => "master"}
+    @branches = ["0.8", "master"]
     ENV["GIT_DIR"] = "#{Config::NGINX_SRC_PATH}.git/"
   end
   
@@ -41,14 +41,14 @@ class NginxUpdater
       return 1
     end
     
-    @branches.each do |k, v|
-      update_branch k, v
+    @branches.each do |branch|
+      update_branch branch
     end
     
     return 0
   end
 
-  def update_branch nginx_branch, git_branch
+  def update_branch git_branch
     
     git_checkout(git_branch)
     
