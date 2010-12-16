@@ -29,7 +29,7 @@ class NginxUpdater
   
   def initialize
     @ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-    @branches = ["0.8", "master"]
+    @branches = ["0.7", "0.8", "0.9"]
     ENV["GIT_DIR"] = "#{Config::NGINX_SRC_PATH}.git/"
   end
   
